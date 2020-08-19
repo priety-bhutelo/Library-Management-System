@@ -1,0 +1,46 @@
+package com.montran.action;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import java.time.LocalDate;
+import java.util.List;
+import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+
+import com.montran.dao.issueDetailsDAO;
+import com.montran.form.issueForm;
+import com.montran.pojo.*;
+
+public class DeleteBookAction extends Action {
+	@Override
+	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		    
+		    issueDetailsDAO dao = new issueDetailsDAO();
+		    issueForm issueform=(issueForm)form;
+		    
+		    int serialnumber=issueform.getSerialnumber();
+		   
+		    String memberCode=issueform.getMemberCode();
+		    String name=issueform.getName();
+		    String book_code=issueform.getBook_code();
+		    String title=issueform.getTitle();
+		    String author=issueform.getAuthor();
+		    LocalDate issuedate=issueform.getIssue_date();
+		    LocalDate returndate=issueform.getReturn_date();
+		    
+		    Book_issue book_issue=dao.getbookissued(serialnumber);
+		    
+		    System.out.println("in delete book_issue"+book_issue);
+		    Book_master book=dao.getbookdetails(book_code);
+	        member_master member=dao.getmemberdetails(memberCode);
+		    Book_issue issue=new Book_issue(serialnumber,member,book,issuedate,returndate);
+		    System.out.println("in delete"+issue);
+		    dao.deleteBook(issue);
+		
+
+		return mapping.findForward("success");
+	}
+}
