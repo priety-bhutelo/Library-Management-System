@@ -21,11 +21,12 @@
 			<tr>
 				<td>Issue serial Number</td>
 				<td><html:text property="serialnumber" /></td>
-				<td><td><html:submit property="serialno" value="Get SerialNumber">Get Book Details</html:submit></td></td>
+				<td><td><html:submit property="serialno" value="Get SerialNumber">Get Serial Number</html:submit></td></td>
 			</tr>
 			<tr>
 				<td>Member Code</td>
 				<td><html:text property="memberCode" /></td>
+				<td><td><html:submit property="membercode" value="Get Member Code">Get member code</html:submit></td></td>
 			</tr>
 			<tr>
 				<td>Member Name</td>
@@ -35,6 +36,7 @@
 			<tr>
 				<td>Book Code</td>
 				<td><html:text property="book_code" /></td>
+				<td><td><html:submit property="bookcode" value="Get Book Code">Get Book Code</html:submit></td></td>
 			</tr>
 			<tr>
 				<td>Title</td>
@@ -58,7 +60,7 @@
 			</tr>
 			
 			<tr>
-			<td><html:submit property="update" value="update Book">Get Book Details</html:submit></td>
+			<td><html:submit property="update" value="update Book">Update Book Details</html:submit></td>
 			</tr>
 			</table>
 	</html:form>
