@@ -23,7 +23,7 @@ public class UpdateBook extends Action {
 			HttpServletResponse response) throws Exception {
 		
 		
-	issueDetailsDAO dao= new issueDetailsDAO();
+		issueDetailsDAO dao= new issueDetailsDAO();
         issueForm issueform=(issueForm)form;
         member_master membermaster=null;
         Book_master book_master=null;
@@ -52,9 +52,74 @@ public class UpdateBook extends Action {
 				httpSession.setAttribute("bookissued", bookissue);
 				httpSession.setAttribute("issueDate", bookissue.getissue_Date());
 				httpSession.setAttribute("returnDate", bookissue.getreturn_Date());
-				return mapping.findForward("update");
+				return mapping.findForward("membercode");
 			}
 		}
+        
+        if (request.getParameter("membercode") != null) {
+			if (request.getParameter("membercode").equals("Get Member Code")) {
+				System.out.println("getMember Button Clicked");
+				
+				if(request.getParameter("memberCode").equals(""))
+				{
+					
+				}
+				else
+				{
+				
+				System.out.println(issueform.getmemberCode());
+				
+				membermaster = dao.getmemberdetails(issueform.getmemberCode());
+				issueform.setmemberName(membermaster.getmemberName());
+				}
+				httpSession.setAttribute("member", membermaster);
+				return mapping.findForward("bookcode");
+			}
+		}
+        
+        if (request.getParameter("bookcode") != null) {
+			if (request.getParameter("bookcode").equals("Get Book Code")) {
+				System.out.println("getBook Button Clicked");
+				System.out.println(issueform.getbook_code());
+				membermaster = dao.getmemberdetails(issueform.getmemberCode());
+				issueform.setmemberName(membermaster.getmemberName());
+
+				book_master = dao.getbookdetails(issueform.getbook_code());
+				LocalDate issueDate = LocalDate.now();
+				LocalDate returnDate = LocalDate.now();
+				issueform.setauthor(book_master.getauthor());
+				issueform.settitle(book_master.gettitle());
+				
+				
+				 System.out.println("date="+issueDate);
+				
+				if (membermaster.getMemberType().equals("Student")) {
+					returnDate = returnDate.plusDays(8);
+					System.out.println(issueform);
+				}
+				if (membermaster.getMemberType().equals("Teacher")) {
+					returnDate = returnDate.plusDays(90);
+					System.out.println(issueform);
+				}
+                
+                 issueform.setissue_Date(issueDate.toString());
+ 				issueform.setreturn_Date(returnDate.toString());
+			    
+				
+				System.out.println("--------------------------------------");
+				System.out.println(issueform);
+
+				
+
+			
+				httpSession.setAttribute("book", book_master);
+				httpSession.setAttribute("issueDate", issueDate);
+				httpSession.setAttribute("returnDate", returnDate);
+				return mapping.findForward("update");
+			}
+        }
+        
+        
         
         if (request.getParameter("update") != null) {
 			if (request.getParameter("update").equals("update Book")) {
@@ -93,4 +158,3 @@ public class UpdateBook extends Action {
 	}
 }
 
-       
