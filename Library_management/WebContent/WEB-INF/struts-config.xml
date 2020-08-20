@@ -27,8 +27,10 @@
 		<action path="/updatebook"
 			type="com.montran.action.UpdateBook" name="issueForm">
 			<forward name="serialno" path="/updatebook.jsp" />
+			<forward name="membercode" path="/updatebook.jsp" />
+			<forward name="bookcode" path="/updatebook.jsp" />
 			<forward name="update" path="/updatebook.jsp" />
-			<forward name="success" path="/AllIssuedbooks.jsp" />
+			<forward name="success" path="/updatebook.jsp" />
 		</action>
 		
 		<action path="/deletebook"
