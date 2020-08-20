@@ -2,8 +2,11 @@ package com.montran.action;
 import javax.persistence.metamodel.SetAttribute;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -20,35 +23,74 @@ public class UpdateBook extends Action {
 			HttpServletResponse response) throws Exception {
 		
 		
-		    issueDetailsDAO dao = new issueDetailsDAO();
-		    issueForm issueform=(issueForm)form;
-		    
-		    int serialnumber=issueform.getSerialnumber();
-		    System.out.println("serialnumber="+serialnumber);
-		    Book_issue book_issue=dao.getbookissued(serialnumber);
-		    Book_master bookmaster=null;
-		    member_master membermaster=null;
-		    request.setAttribute("serialnumber", serialnumber);
-		    String memberCode=issueform.getMemberCode();
-		    String name=issueform.getName();
-		    String book_code=bookmaster.getBook_code();
-		    System.out.println("in book_updatebook cose="+book_code);
-		    String title=issueform.getTitle();
-		    String author=issueform.getAuthor();
-		    LocalDate issuedate=book_issue.getIssue_date();
-		    LocalDate returndate=book_issue.getReturn_date();
-		    System.out.println("in book_issue="+book_issue);
-		    
-		   
-		    Book_master book=dao.getbookdetails(bookmaster.getBook_code());
-		    System.out.println("bookcode="+book);
-	        member_master member=dao.getmemberdetails(membermaster.getMemberCode());
-		    Book_issue issue=new Book_issue(serialnumber,member,book,issuedate,returndate);
-		    System.out.println("in update"+issue);
-		    request.setAttribute("issueDetail", issue);
-		    dao.updateBook(issue);
-		
+	issueDetailsDAO dao= new issueDetailsDAO();
+        issueForm issueform=(issueForm)form;
+        member_master membermaster=null;
+        Book_master book_master=null;
+        Book_issue bookissue=null;
+        HttpSession httpSession = request.getSession();
+      
+        if (request.getParameter("serialno") != null) {
+			if (request.getParameter("serialno").equals("Get SerialNumber")) {
+				System.out.println("serialnumber Button Clicked");
+				System.out.println(issueform.getserialnumber());
+				
+				bookissue = dao.getbookbyID(issueform.getserialnumber());
+				member_master member=(member_master)bookissue.getMember();
+				Book_master book=(Book_master)bookissue.getBook();
+				issueform.setmemberCode(member.getMemberCode());
+				issueform.setmemberName(member.getmemberName());
+				issueform.setmemberName(member.getmemberName());
+				issueform.setbook_code(book.getBook_code());
+				issueform.settitle(book.gettitle());
+				issueform.setauthor(book.getauthor());
+				issueform.setissue_Date(bookissue.getissue_Date().toString());
+				issueform.setreturn_Date(bookissue.getreturn_Date().toString());
+				
+				httpSession.setAttribute("book", book);
+				httpSession.setAttribute("member", member);
+				httpSession.setAttribute("bookissued", bookissue);
+				httpSession.setAttribute("issueDate", bookissue.getissue_Date());
+				httpSession.setAttribute("returnDate", bookissue.getreturn_Date());
+				return mapping.findForward("update");
+			}
+		}
+        
+        if (request.getParameter("update") != null) {
+			if (request.getParameter("update").equals("update Book")) {
+				System.out.println("update Book Button Clicked");
+				System.out.println(issueform.getserialnumber());
+				
+				
+				LocalDate issueDate = null;
+				LocalDate returnDate = null;
 
+				if (httpSession.getAttribute("book") != null)
+					book_master = (Book_master) httpSession.getAttribute("book");
+				if (httpSession.getAttribute("member") != null)
+					membermaster = (member_master) httpSession.getAttribute("member");
+				if (httpSession.getAttribute("bookissued") != null)
+					book_master = (Book_master) httpSession.getAttribute("book");
+				if (httpSession.getAttribute("member") != null)
+					membermaster = (member_master) httpSession.getAttribute("member");
+				if (httpSession.getAttribute("issueDate") != null)
+					issueDate = (LocalDate) httpSession.getAttribute("issueDate");
+				if (httpSession.getAttribute("returnDate") != null)
+					returnDate = (LocalDate) httpSession.getAttribute("returnDate");
+				
+				Date issueD = Date.from(issueDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+				Date returnD = Date.from(returnDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+
+				bookissue= new Book_issue(issueform.getserialnumber(), issueDate, returnDate, book_master, membermaster);
+				dao.updateBook(bookissue);
+				System.out.println("Book updated Successfully !!");
+				
+				httpSession.setAttribute("bookissued", bookissue);
+						}
+		}
+        
 		return mapping.findForward("success");
 	}
 }
+
+       
