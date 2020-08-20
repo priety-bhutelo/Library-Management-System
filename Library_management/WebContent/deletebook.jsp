@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>update Book</title>
+<title>Delete Book</title>
 
 </head>
 <body>
