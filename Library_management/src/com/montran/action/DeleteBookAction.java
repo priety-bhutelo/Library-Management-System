@@ -21,7 +21,7 @@ public class DeleteBookAction extends Action {
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		
-	issueDetailsDAO dao= new issueDetailsDAO();
+		issueDetailsDAO dao= new issueDetailsDAO();
         issueForm issueform=(issueForm)form;
         member_master membermaster=null;
         Book_master book_master=null;
@@ -51,7 +51,7 @@ public class DeleteBookAction extends Action {
 					httpSession.setAttribute("bookissued", bookissue);
 					httpSession.setAttribute("issueDate", bookissue.getissue_Date());
 					httpSession.setAttribute("returnDate", bookissue.getreturn_Date());
-					return mapping.findForward("update");
+					return mapping.findForward("delete");
 				}
 			}
 	        
@@ -80,7 +80,7 @@ public class DeleteBookAction extends Action {
 					Date issueD = Date.from(issueDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 					Date returnD = Date.from(returnDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
-				        bookissue= new Book_issue(issueform.getserialnumber(), issueDate, returnDate, book_master, membermaster);
+					bookissue= new Book_issue(issueform.getserialnumber(), issueDate, returnDate, book_master, membermaster);
 					dao.deleteBook(bookissue);
 					System.out.println("Book deleted Successfully !!");
 					
