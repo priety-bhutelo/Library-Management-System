@@ -26,11 +26,15 @@
 		
 		<action path="/updatebook"
 			type="com.montran.action.UpdateBook" name="issueForm">
-			<forward name="success" path="/updatebook.jsp" />
+			<forward name="serialno" path="/updatebook.jsp" />
+			<forward name="update" path="/updatebook.jsp" />
+			<forward name="success" path="/AllIssuedbooks.jsp" />
 		</action>
 		
 		<action path="/deletebook"
 			type="com.montran.action.DeleteBookAction" name="issueForm">
+			<forward name="serialdelete" path="/deletebook.jsp" />
+			<forward name="delete" path="/deletebook.jsp" />
 			<forward name="success" path="/deletebook.jsp" />
 		</action>
 	</action-mappings>
