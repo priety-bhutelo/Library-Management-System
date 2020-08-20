@@ -80,7 +80,7 @@ public class DeleteBookAction extends Action {
 					Date issueD = Date.from(issueDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 					Date returnD = Date.from(returnDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
-				  
+				        bookissue= new Book_issue(issueform.getserialnumber(), issueDate, returnDate, book_master, membermaster);
 					dao.deleteBook(bookissue);
 					System.out.println("Book deleted Successfully !!");
 					
